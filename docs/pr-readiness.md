@@ -132,7 +132,7 @@ v0.3.19 → v0.3.22 之后：`node selftest.js` 27 项全绿；术语与字号�
 - 丢掉：Shadow DOM 宿主、`host.style`、路由轮询、`isUploadRoute/syncWithRoute`、`openPanel/closePanel/resetUploader`、`buildPanel` 的字符串 HTML、自造 CSS 与 token 同步（改继承站点 `:root`）。
 - 保留（几乎可原样搬）：`splitRelativePath / bestCategory / buildGroups / upsertDir / dirsFromItems / dirHasUploaded / dedupeKey / nameKey / scopeKey / classify / collectDirTargets / collectCourseTargets / fuzzyFilter / dirOptions / Pacer` 及它们的单测（移植后随功能增长到 31 条）。
 - 实际落地：17 个文件、约 3100 行、零新增依赖；`vue/tools/` 带一个本地接口替身 + 29 项无头断言，`node --test` 31 条。
-- PR 创建后的追加（同一分支，PR 自动更新）：上传页按视口铺满（收掉站点落地页 64/80 留白，三栏吃掉剩余高度）+ 未登录时顶部提示「请先登录」；以及**外观与插件版对齐**（页头「鲸鱼 + 批量投递 upcshare」、卡片 12px、主操作 35px / 15px·600、次级 34px / 13px·500、拖放区在「已有资源」上方）。
+- PR 创建后的追加（同一分支，PR 自动更新）：上传页按视口铺满（收掉站点落地页 64/80 留白，三栏吃掉剩余高度）+ 未登录时顶部提示「请先登录」；、**外观与插件版对齐**（页头「鲸鱼 + 批量投递 upcshare」、卡片 12px、主操作 35px / 15px·600、次级 34px / 13px·500、拖放区在「已有资源」上方）。
 - 拆组件：`CoursePicker.vue`（组合框）、`DirRail.vue`、`FileDrop.vue`、`QueueBar.vue`、`SiteFilesPanel.vue`。
 - 状态：`reactive({ course, activeDir, running, progress })`，仍然不落盘。
 - 测试：把 smoke 从 CDP 注入改成 Vitest + 组件测试，生产站那条只留作手工验收。
