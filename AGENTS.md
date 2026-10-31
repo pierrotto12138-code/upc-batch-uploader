@@ -2,6 +2,8 @@
 
 > 给下一个接手这个项目的 AI agent（或开发者）。
 > 读这一份就够开工，不需要重新调研站点。**最后更新：2026-10-31，v0.3.32 生产端到端 62 项断言全过、站点无残留。**
+> 代码仓库：<https://github.com/pierrotto12138-code/upc-batch-uploader>（`dist/`、`files/`、归档目录都不进仓库）
+>
 > **进度对齐看 [HANDOFF.md](HANDOFF.md)：做到哪了、验过什么、什么没做、哪些目录不能外发。**
 > 感谢 [upc-share](https://github.com/foggy-33/upc-share) 的作者为学校资源共享做出的伟大贡献；
 > 感谢 DeepSeek V4.1 Flash 与 Qwen 3.8 Flash 的优渥能力。

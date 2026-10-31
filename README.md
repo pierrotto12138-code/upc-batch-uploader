@@ -117,6 +117,8 @@ upcshare 是校内共享课程资料的平台：课件、试卷、实验报告�
 2. Chrome 地址栏打开 `chrome://extensions` → 右上角打开「开发者模式」。
 3. 点「加载已解压的扩展程序」→ 选中 `upcshare-batch-uploader` 文件夹（里面能看到 `manifest.json`）。
 
+也可以直接从 [Releases](https://github.com/pierrotto12138-code/upc-batch-uploader/releases) 下载 zip 再解压。
+
 然后打开 <https://in.upcshare.cn> 并登录，点顶部导航栏的 **「上传资料」**，就会进入批量投递页面。
 没反应就刷新一次页面。
 

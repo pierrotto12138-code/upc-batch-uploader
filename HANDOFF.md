@@ -112,7 +112,7 @@ syncWithRoute()  // 进 /admin 且没开 → openPanel()；离开且开着 → c
 其他红线（同 `AGENTS.md` 第 7 条）：不加密码输入框、不把密码/token 写进任何文件或 `localStorage`、
 保持同源 `/api/...`（跨源 fetch 会丢 Cookie）、不提高并发或去掉限速、不引入构建工具/npm 依赖。
 
-**这个项目目录不是 git 仓库（没有 `.git`）**，所以没有提交历史；真实密码不在任何文件里（`grep -i password` 只会命中 `docs/api.md` 的 `"***"` 占位和两个测试脚本从环境变量读密码的那两行），需要时向用户索取。
+**这个目录从 2026-10-31 起是一个 git 仓库**，远端是 <https://github.com/pierrotto12138-code/upc-batch-uploader>（公开）；`.gitignore` 排除了 `files/`、`_整理归档_*/`、`dist/`。真实密码不在任何文件里（`grep -i password` 只会命中 `docs/api.md` 的 `"***"` 占位和两个测试脚本从环境变量读密码的那两行），需要时向用户索取。
 
 ---
 

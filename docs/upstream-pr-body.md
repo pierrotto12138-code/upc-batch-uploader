@@ -111,6 +111,12 @@ node tools/ui-check.mjs                   # 29 项断言，真实鼠标事件
 
 `node_modules/` 已提交进仓库，但根 `.gitignore` 中的 `dist/` 规则同时排除了 `node_modules/vite/dist/` 等构建产物目录。因此新克隆后直接执行 `npm run build` 会因缺少模块失败，需先 `npm install`。
 
+### 另外：一个实验性形态
+
+除了这个页面，另有一个浏览器扩展版本（[pierrotto12138-code/upc-batch-uploader](https://github.com/pierrotto12138-code/upc-batch-uploader)）：
+功能与规则和本 PR 一致，外观不同——它是覆盖在站点上的独立面板，随时可开可关，也不依赖本 PR 是否合并。
+两者共用同一批纯函数与单测，可以按需选择。
+
 ### 致谢
 
 感谢 upc-share 的作者维护这个平台，为学校资源共享做出的贡献；这个批量上传页在实现过程中，
