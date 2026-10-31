@@ -1,0 +1,22 @@
+{
+  "manifest_version": 3,
+  "name": "upcshare 批量投递",
+  "version": "0.3.32",
+  "description": "把一整个课程文件夹按「学科分类/子目录」自动分组，一次性投递到 upcshare 资料库。仅在本机运行，不收集任何数据。",
+  "icons": {
+    "16": "icons/icon16.png",
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png"
+  },
+  "content_scripts": [
+    {
+      "matches": [
+        "https://in.upcshare.cn/*",
+        "https://upcshare.cn/*",
+        "https://www.upcshare.cn/*"
+      ],
+      "js": ["content.js"],
+      "run_at": "document_idle"
+    }
+  ]
+}
