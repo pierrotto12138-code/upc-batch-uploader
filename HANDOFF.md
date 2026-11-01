@@ -143,11 +143,16 @@ syncWithRoute()  // 进 /admin 且没开 → openPanel()；离开且开着 → c
 
 ## 5. 分发包
 
-`dist/upcshare-batch-uploader/`（v0.3.32，含 manifest + content.js + icons + README + LICENSE + `preview.png`，
-README 里那张图不再指向包外）、
-同目录 `upcshare-batch-uploader-0.3.32.zip`、`.crx`（用 `.key.pem` 签名，仅作备份——
-Chrome 个人版会拒绝手动拖入的 CRX，报 `CRX_REQUIRED_PROOF_MISSING`）。
-两者 2026-10-31 20:05 重建（v0.3.32），包内文件与源文件逐字节 `cmp` 一致。
+两套包，**代码完全相同**（`content.js` 逐字节一致，sha256 相同），只是清单与说明里的浏览器名不同：
 
-安装：`chrome://extensions` → 开发者模式 → 加载已解压 → 选 `dist/upcshare-batch-uploader` → 刷新 upcshare 页面。
+| 包 | 给谁 | 说明 |
+|---|---|---|
+| `dist/upcshare-batch-uploader/` + `upcshare-batch-uploader-0.3.32.zip` | Chrome | 2026-10-31 20:05 重建 |
+| `dist/upcshare-batch-uploader-edge/` + `upcshare-batch-uploader-edge-0.3.32.zip` | Edge | 2026-11-01 收到，清单多一个 `browser_specific_settings.edge`；Edge 156 实测 `--load-extension` 能加载并打开面板 |
+| `upcshare-batch-uploader.crx` | 备份 | 带 `.key.pem` 签名，仅作备份——Chrome 个人版会拒绝手动拖入的 CRX，报 `CRX_REQUIRED_PROOF_MISSING` |
+
+两个文件夹都含 manifest + content.js + icons + README + LICENSE + `preview.png`。
+两个 zip 都作为资产挂在 [Release v0.3.32](https://github.com/pierrotto12138-code/upc-batch-uploader/releases/tag/v0.3.32) 上。
+
+安装：Chrome 用 `chrome://extensions`、Edge 用 `edge://extensions` → 开发者模式 → 加载已解压 → 选对应文件夹 → 刷新 upcshare 页面。
 **不要把项目根目录当扩展加载**（里面有 1.5GB 的 `files/` 和归档）。

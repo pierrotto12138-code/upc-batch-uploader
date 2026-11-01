@@ -53,7 +53,7 @@
 
 ## 这是什么
 
-一个 Chrome 扩展（MV3 内容脚本），注入到 [upcshare](https://in.upcshare.cn) 的资料上传页，
+一个浏览器扩展（Chrome / Edge 都能装，MV3 内容脚本），注入到 [upcshare](https://in.upcshare.cn) 的资料上传页，
 把"一次只能传一个文件"的表单变成一个批量工作台。
 
 upcshare 是校内共享课程资料的平台：课件、试卷、实验报告、复习资料。站点自己的上传入口一次只能
@@ -96,7 +96,7 @@ upcshare 是校内共享课程资料的平台：课件、试卷、实验报告�
 - **传完能核对**：底部队列的「导出投递结果（CSV）」导一张 UTF-8 CSV（BOM + 落点 / 状态 / 站内 id / 失败原因），断在中间也能人工对账。
 - **看得懂的帮助**：「从文件夹导入」右上角那颗「?」就是整理规范（悬停或键盘聚焦会浮出说明），可以整段复制走，界面上的规则和它由同一条测试绑住。
 - **长得像站点自己的页面**：颜色、圆角、字体在运行时取自站点 CSS token，明暗主题联动。
-- **零依赖、零构建**：一个 `content.js`，`chrome://extensions` 里点刷新就生效。
+- **零依赖、零构建**：一个 `content.js`，`chrome://extensions`（Edge 用 `edge://extensions`）里点刷新就生效。
 
 ## 快速开始
 
@@ -112,14 +112,22 @@ upcshare 是校内共享课程资料的平台：课件、试卷、实验报告�
 
 ## 安装
 
-**前置条件**：Chrome 120 左右或更新（实测 156）、能在校园网访问 `in.upcshare.cn`、
+**前置条件**：Chrome 或 Edge 120 左右或更新（两者都实测 156，Chromium 内核）、能在校园网访问 `in.upcshare.cn`、
 一个已注册的 upcshare 账号。**不需要** Node、不需要 npm、不需要任何构建工具。
 
-1. 把 `upcshare-batch-uploader` 文件夹解压到电脑上任意位置（**不要**在压缩包里直接操作）。
-2. Chrome 地址栏打开 `chrome://extensions` → 右上角打开「开发者模式」。
-3. 点「加载已解压的扩展程序」→ 选中 `upcshare-batch-uploader` 文件夹（里面能看到 `manifest.json`）。
+从 [Releases](https://github.com/pierrotto12138-code/upc-batch-uploader/releases) 下载对应浏览器的 zip 并解压
+（**不要**在压缩包里直接操作）：Chrome 用 `upcshare-batch-uploader-0.3.32.zip`，
+Edge 用 `upcshare-batch-uploader-edge-0.3.32.zip`。两者代码完全相同，只是清单与说明里的浏览器名不同。
 
-也可以直接从 [Releases](https://github.com/pierrotto12138-code/upc-batch-uploader/releases) 下载 zip 再解压。
+**Chrome**
+
+1. 地址栏打开 `chrome://extensions` → 右上角打开「开发者模式」。
+2. 点「加载已解压的扩展程序」→ 选中解压出来的文件夹（里面能看到 `manifest.json`）。
+
+**Edge**
+
+1. 地址栏打开 `edge://extensions` → 左下角打开「开发人员模式」。
+2. 点「加载解压缩的扩展」→ 选中解压出来的 `upcshare-batch-uploader-edge` 文件夹。
 
 **用 Edge？** 功能与 Chrome 版完全相同，源码在 [edge/](edge/)：`edge://extensions` → 左下角「开发人员模式」→「加载解压缩的扩展」→ 选 `edge/` 目录。安装细节见 [edge/README.md](edge/README.md)。
 
@@ -127,7 +135,7 @@ upcshare 是校内共享课程资料的平台：课件、试卷、实验报告�
 没反应就刷新一次页面。
 
 > 只在 `in.upcshare.cn`、`upcshare.cn`、`www.upcshare.cn` 三个域名生效，其它网站不会注入。
-> 卸载：`chrome://extensions` → 移除，不留任何东西（插件零持久化）。
+> 卸载：`chrome://extensions`（Edge 是 `edge://extensions`）→ 移除，不留任何东西（插件零持久化）。
 
 ## 使用
 
@@ -251,7 +259,7 @@ upcshare 是校内共享课程资料的平台：课件、试卷、实验报告�
 <summary><b>按钮不出现 / 点了没反应？</b></summary>
 
 确认地址是 `https://in.upcshare.cn`（不是 `http://`、不是别的域名），刷新一次页面；
-到 `chrome://extensions` 确认插件是启用状态，改过代码的话点一下刷新图标。
+到 `chrome://extensions`（Edge 是 `edge://extensions`）确认插件是启用状态，改过代码的话点一下刷新图标。
 </details>
 
 <details>
@@ -279,7 +287,7 @@ upcshare 是校内共享课程资料的平台：课件、试卷、实验报告�
 </details>
 
 <details>
-<summary><b>Chrome 提示「可以读取和更改您在所有网站上的数据」？</b></summary>
+<summary><b>安装时提示「可以读取和更改您在所有网站上的数据」？</b></summary>
 
 任何内容脚本扩展都会这么提示。本插件 `manifest.json` 的 `matches` 只有三个 upcshare 域名，
 其它网站不会注入。

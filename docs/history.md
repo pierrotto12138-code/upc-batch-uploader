@@ -48,6 +48,9 @@
 
 验证：生产端到端 61 → **62 项全过、站点无残留**（新增垃圾桶尺寸断言，实测 30/30、图标 16）；`node selftest.js` 31 项；Vue `ui-check` 27/27、`node --test` 31 条、`vite build` 通过。`preview.png` 已重生成。
 
+2026-11-01：用户做出 Edge 版本（`content.js` 与 Chrome 包 sha256 一致，清单多 `browser_specific_settings.edge`），
+在 Edge 156 实测能加载并打开面板；两个 zip 都挂到 Release 上，README 安装步骤拆成 Chrome / Edge 两条。
+
 同一天 PR [#1](https://github.com/foggy-33/upc-share/pull/1) 创建（OPEN / MERGEABLE，15 个 commit、17 个文件）；三条产品决策交给上游作者定。
 
 ### v0.3.31 · 根目录常驻 + 行右侧改两段式垃圾桶

@@ -69,7 +69,7 @@ node selftest.js
 | 上传 | 令牌桶限速（burst 3 / 10.5 秒一个）、跳过已存在、只试运行、管理员自动通过审核、导出投递结果 CSV（UTF-8 BOM） |
 | 权限 | 「已有资源」（看/删站内文件）仅管理员；站内子目录与根目录不可删（站点没有「目录」实体） |
 | 单测 / 端到端 | 31 项 / 生产 62 项断言全过、站点无残留 |
-| 打包 | `chrome --pack-extension` 通过，`manifest.json` 合法 |
+| 打包 | Chrome / Edge 两个包都能 `--pack-extension` 通过；`content.js` 逐字节相同，Edge 清单多一个 `browser_specific_settings.edge` |
 | 真人鼠标 | 未验证（手感、大文件进度、滚动时的跟随） |
 | 使用者 | 站点管理员账号（真实账号不进仓库；跑端到端时向使用者索取）。密码不写进仓库 |
 
@@ -82,6 +82,7 @@ node selftest.js
 | 需要 | 说明 |
 |---|---|
 | Chrome | 装扩展手工验证用；本机实测 156.0.8078.48 |
+| Edge | 同上；本机实测 156.0.4314.50（2026-11-01 用 `--load-extension` 实测能加载并打开面板） |
 | Node ≥ 22 | 只用于跑测试（用了内置 `WebSocket` 和 `fetch`）。运行时零依赖 |
 | 网络 | 必须在校园网，`in.upcshare.cn` 可直连（公网入口走 frp，会很慢） |
 
@@ -306,6 +307,6 @@ node selftest.js                                   # 秒级，零副作用
 - [ ] 若改了 UI：重新跑 `-Screenshot`，`preview.png` 有变化
 - [ ] 若改了接口假设：同步更新 `docs/api.md`
 - [ ] 若改了设计取舍：同步更新 `docs/design.md`
-- [ ] 若改了 `content.js` / `manifest.json`：升版本号并重建 `dist/`（文件夹 + zip + crx）
+- [ ] 若改了 `content.js` / `manifest.json`：升版本号并重建 `dist/`（Chrome 与 Edge 两个文件夹 + 两个 zip + crx）
 - [ ] 阶段性收尾：更新 `HANDOFF.md` 的「做到哪 / 没做啥 / 复验命令」
 - [ ] 没有把密码/token 写进任何文件（`git grep -i password` 自查）
