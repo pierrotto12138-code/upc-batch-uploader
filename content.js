@@ -1362,7 +1362,8 @@
   // 站内已有的子目录不给改名：站点没有"改子目录名"的接口，改了也只影响本次上传落到哪，
   // 反而会让站内的子目录越改越乱。只有本次新建的子目录可以改名。
   function canRenameDir(dir) {
-    return !!dir && !dirHasUploaded(dir)
+    // 根目录 = 学科分类本身：改了名，文件会落到一个真叫「根目录」的子目录里
+    return !!dir && !dir.isRoot && !dirHasUploaded(dir)
   }
 
   function coursePending() {
@@ -2777,6 +2778,7 @@
       dirOptions: dirOptions,
       dirsFromItems: dirsFromItems,
       dirHasUploaded: dirHasUploaded,
+      canRenameDir: canRenameDir,
       splitRelativePath: splitRelativePath,
       safeSegment: safeSegment,
       dedupeKey: dedupeKey,

@@ -588,10 +588,12 @@ async function main() {
     }
   })()`)
   check('新建子目录出现在左侧', added.dirs === 2 && added.names.includes('手工测试子目录'), added.names.join(' / '))
-  // 先看「根目录」那一行（名字本来就是空的），这样聚焦不会把当前子目录改名改掉
+  // 下拉只能在"本次新建、还没传过"的子目录上打开：根目录与站内已有目录都是只读的（v0.3.33 起根目录也不给改名）。
+  // 所以挑最后一行（刚建的「手工测试子目录」）来量下拉内容。
   const dirPool = await evaluate(client, `(async () => {
     const S = ${S}
-    S.querySelectorAll('.upc-dir')[0].click()
+    const rows = [...S.querySelectorAll('.upc-dir')]
+    rows[rows.length - 1].click()
     await new Promise((r) => setTimeout(r, 250))
     const t = S.querySelector('[data-el="dirTitle"]')
     t.blur()                       // 新建子目录时焦点还在这里，先移开才能让 focus 真的触发
@@ -869,16 +871,23 @@ async function main() {
     JSON.stringify(round.trash))
 
   console.log('9d) 根目录常驻：选中任一学科分类，左栏第一行就是「根目录」')
-  const rootRow = await evaluate(client, `(() => {
+  const rootRow = await evaluate(client, `(async () => {
     const S = ${S}
     const names = [...S.querySelectorAll('.upc-dir-name')].map((n) => n.textContent)
     const rootBtn = S.querySelector('.upc-dir .upc-dir-del')
+    // 选中根目录，看右侧名字框是不是只读（根目录 = 学科分类本身，不给改名）
+    S.querySelectorAll('.upc-dir')[0].click()
+    await new Promise((r) => setTimeout(r, 300))
+    const title = S.querySelector('[data-el="dirTitle"]')
     return { names: names, firstIsRoot: names[0] === '根目录',
-      rootDisabled: rootBtn ? rootBtn.disabled : null, rootTitle: rootBtn ? rootBtn.title : '' }
+      rootDisabled: rootBtn ? rootBtn.disabled : null, rootTitle: rootBtn ? rootBtn.title : '',
+      titleReadOnly: title ? title.readOnly : null, titleValue: title ? title.value : null }
   })()`)
   check('「根目录」固定排在第一行，且不给删除（它是学科分类本身）',
     rootRow.firstIsRoot === true && rootRow.rootDisabled === true &&
       /根目录就是学科分类本身/.test(rootRow.rootTitle), JSON.stringify(rootRow))
+  check('选中「根目录」时名字是只读的（改名会把文件传进「根目录」这个真子目录）',
+    rootRow.titleReadOnly === true && rootRow.titleValue === '', JSON.stringify(rootRow))
 
   console.log('10) 换学科分类必须清空上一门的子目录')
   // 先在当前分类下放一个有名字的子目录，换课后就该消失

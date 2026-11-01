@@ -8,8 +8,8 @@
     <img alt="Edge MV3" src="https://img.shields.io/badge/Edge-MV3-0078D7?logo=microsoftedge&logoColor=white">
     <img alt="零依赖" src="https://img.shields.io/badge/dependencies-0-success">
     <img alt="无构建" src="https://img.shields.io/badge/build-none-lightgrey">
-    <img alt="测试" src="https://img.shields.io/badge/tests-31%20unit%20%2B%2062%20e2e-success">
-    <img alt="版本" src="https://img.shields.io/badge/version-0.3.32-blue">
+    <img alt="测试" src="https://img.shields.io/badge/tests-32%20unit%20%2B%2063%20e2e-success">
+    <img alt="版本" src="https://img.shields.io/badge/version-0.3.33-blue">
     <img alt="License" src="https://img.shields.io/badge/license-MIT-blue">
   </p>
 
@@ -115,8 +115,8 @@ upcshare 是校内共享课程资料的平台：课件、试卷、实验报告�
 一个已注册的 upcshare 账号。**不需要** Node、不需要 npm、不需要任何构建工具。
 
 从 [Releases](https://github.com/pierrotto12138-code/upc-batch-uploader/releases) 下载对应浏览器的 zip 并解压
-（**不要**在压缩包里直接操作）：Chrome 用 `upcshare-batch-uploader-0.3.32.zip`，
-Edge 用 `upcshare-batch-uploader-edge-0.3.32.zip`。两者代码完全相同，只是清单与说明里的浏览器名不同。
+（**不要**在压缩包里直接操作）：Chrome 用 `upcshare-batch-uploader-0.3.33.zip`，
+Edge 用 `upcshare-batch-uploader-edge-0.3.33.zip`。两者代码完全相同，只是清单与说明里的浏览器名不同。
 
 **Chrome**
 
@@ -314,10 +314,10 @@ Edge 用 `upcshare-batch-uploader-edge-0.3.32.zip`。两者代码完全相同，
 
 | 层 | 覆盖 | 怎么跑 |
 |---|---|---|
-| 单元测试（31 项） | 路径折算、学科分类模糊匹配、按分类作用域的查重、目录收集、默认名编号、限速器 | `node selftest.js` |
-| 端到端（62 项断言） | 注入 → 登录 → 真实鼠标点导航进 `/admin` → 融入站点外观与纵向铺满 → 整理规范弹层（内容 / 复制反馈 / 关闭）→ 课程栏三个盒子对齐 → 门禁与下拉 → 导入确认 → 建/改名/移除子目录 → 试运行 → 真实上传 → 自动审核 → 站内校验 → 已有资源两步删除 → 换分类清空 → 探针清理 | `.\tools\headless.ps1 -User <账号> -Password <密码>` |
+| 单元测试（32 项） | 路径折算、学科分类模糊匹配、按分类作用域的查重、目录收集、默认名编号、限速器 | `node selftest.js` |
+| 端到端（63 项断言） | 注入 → 登录 → 真实鼠标点导航进 `/admin` → 融入站点外观与纵向铺满 → 整理规范弹层（内容 / 复制反馈 / 关闭）→ 课程栏三个盒子对齐 → 门禁与下拉 → 导入确认 → 建/改名/移除子目录 → 试运行 → 真实上传 → 自动审核 → 站内校验 → 已有资源两步删除 → 换分类清空 → 探针清理 | `.\tools\headless.ps1 -User <账号> -Password <密码>` |
 
-最近一次实测：2026-10-31，生产站 62 项断言全过、站点无残留、退出码 0。
+最近一次实测：2026-11-02，生产站 63 项断言全过、站点无残留、退出码 0。
 端到端会往生产站上传一个 17 字节的探针文件，跑完自动删除（失败时也有兜底清理）。
 
 ## 路线图

@@ -1,4 +1,4 @@
-# 交接文档 · 2026-10-31 · v0.3.32
+# 交接文档 · 2026-11-02 · v0.3.33
 
 > 配合 [AGENTS.md](AGENTS.md)（怎么开工）、[docs/design.md](docs/design.md)（为什么这样设计）、
 > [docs/history.md](docs/history.md)（每个版本改了什么）一起看。
@@ -8,9 +8,9 @@
 
 | 项 | 状态 |
 |---|---|
-| 版本 | v0.3.32（`dist/` 已重建：文件夹 + zip + crx） |
-| 单测 | 31 项全绿（`node selftest.js`） |
-| 端到端 | 生产站 62 项断言全过、站点无残留（2026-10-31） |
+| 版本 | v0.3.33（`dist/` 已重建：Chrome / Edge 两个文件夹 + 两个 zip + crx） |
+| 单测 | 32 项全绿（`node selftest.js`） |
+| 端到端 | 生产站 63 项断言全过、站点无残留（2026-11-02） |
 | Vue 镜像 | 31 条 `node --test` / 29 项无头断言 / `vite build` 均通过 |
 | 未验证 | 真人鼠标手感、几百 MB 大文件的进度表现 |
 | 提 PR | **已创建 [#1](https://github.com/foggy-33/upc-share/pull/1)**（2026-10-31，OPEN / MERGEABLE），等上游作者 review——见 [docs/pr-readiness.md](docs/pr-readiness.md) 与 §4 |
@@ -30,7 +30,7 @@
 
 ## 0. 一句话状态
 
-插件 v0.3.32 端到端可用：**31 项单测全绿、62 项生产端到端断言全过、站点无残留**（2026-10-31 实测）；
+插件 v0.3.33 端到端可用：**32 项单测全绿、63 项生产端到端断言全过、站点无残留**（2026-10-31 实测）；
 同一份逻辑已移植进上游 Vue 版并提交 PR [#1](https://github.com/foggy-33/upc-share/pull/1)（见 §4 第 6 条）。
 `files/` 里 410 个课件已全部整理+去隐私+压成合规格式，随时可以上传。
 面板现在**看起来就是站点自己的一个页面**（标题 + 几块卡片，没有外层对话框，
@@ -45,7 +45,7 @@
 ## 1. 怎么确认当前代码是好的
 
 ```powershell
-node selftest.js                                        # 全部通过：31 项（零副作用）
+node selftest.js                                        # 全部通过：32 项（零副作用）
 .\tools\headless.ps1 -User <账号> -Password '<问用户要>'   # 约 40 秒，会真上传 17 字节探针再删掉
 .\tools\headless.ps1 -User ... -Password ... -Screenshot     # 重新生成 preview.png
 ```
@@ -147,12 +147,12 @@ syncWithRoute()  // 进 /admin 且没开 → openPanel()；离开且开着 → c
 
 | 包 | 给谁 | 说明 |
 |---|---|---|
-| `dist/upcshare-batch-uploader/` + `upcshare-batch-uploader-0.3.32.zip` | Chrome | 2026-10-31 20:05 重建 |
-| `edge/`（仓库内目录）+ `dist/upcshare-batch-uploader-edge/` + `upcshare-batch-uploader-edge-0.3.32.zip` | Edge | 清单多一个 `browser_specific_settings.edge`；`content.js` 与根目录逐字节一致（改完要 `cp content.js edge/content.js`）；Edge 156 实测 `--load-extension` 能加载并打开面板 |
+| `dist/upcshare-batch-uploader/` + `upcshare-batch-uploader-0.3.33.zip` | Chrome | 2026-11-02 重建（v0.3.33） |
+| `edge/`（仓库内目录）+ `dist/upcshare-batch-uploader-edge/` + `upcshare-batch-uploader-edge-0.3.33.zip` | Edge | 清单多一个 `browser_specific_settings.edge`；`content.js` 与根目录逐字节一致（改完要 `cp content.js edge/content.js`）；Edge 156 实测 `--load-extension` 能加载并打开面板 |
 | `upcshare-batch-uploader.crx` | 备份 | 带 `.key.pem` 签名，仅作备份——Chrome 个人版会拒绝手动拖入的 CRX，报 `CRX_REQUIRED_PROOF_MISSING` |
 
 两个文件夹都含 manifest + content.js + icons + README + LICENSE + `preview.png`。
-两个 zip 都作为资产挂在 [Release v0.3.32](https://github.com/pierrotto12138-code/upc-batch-uploader/releases/tag/v0.3.32) 上。
+两个 zip 都作为资产挂在 [Release v0.3.33](https://github.com/pierrotto12138-code/upc-batch-uploader/releases/tag/v0.3.33) 上。
 
 安装：Chrome 用 `chrome://extensions`、Edge 用 `edge://extensions` → 开发者模式 → 加载已解压 → 选对应文件夹 → 刷新 upcshare 页面。
 **不要把项目根目录当扩展加载**（里面有 1.5GB 的 `files/` 和归档）。

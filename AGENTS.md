@@ -1,7 +1,7 @@
 # AGENTS.md
 
 > 给下一个接手这个项目的 AI agent（或开发者）。
-> 读这一份就够开工，不需要重新调研站点。**最后更新：2026-10-31，v0.3.32 生产端到端 62 项断言全过、站点无残留。**
+> 读这一份就够开工，不需要重新调研站点。**最后更新：2026-11-02，v0.3.33 生产端到端 63 项断言全过、站点无残留。**
 > 代码仓库：<https://github.com/pierrotto12138-code/upc-batch-uploader>（`dist/`、`files/`、归档目录都不进仓库）
 >
 > **进度对齐看 [HANDOFF.md](HANDOFF.md)：做到哪了、验过什么、什么没做、哪些目录不能外发。**
@@ -61,14 +61,14 @@ node selftest.js
 
 | 项 | 状态 |
 |---|---|
-| 版本 | v0.3.32 |
+| 版本 | v0.3.33（根目录不给改名，插件与站点页同步） |
 | 面板 | 单视图三栏（学科分类 → 子目录 → 文件），融入站点外观并纵向铺满；颜色/圆角/字体运行时取自站点 token（含深色主题） |
 | 课程栏 | 输入框 + 「从文件夹导入」+ 右上角「?」徽标（35px / 8px 圆角 / 15px·600）；手打全名回车或失焦也会带出站内子目录 |
 | 子目录栏 | 每个学科分类常驻一行「根目录」；行右侧 30px 两段式垃圾桶（点两次才删，站内子目录与根目录禁用并说明原因）；「＋ 新建子目录」在列表下方 |
 | 导入 | 「从文件夹导入」与**直接拖文件夹**共用同一条识别链路（按层级折算成学科分类 / 子目录，先弹"看得见规模"的确认，超 100 个文件也不截断） |
 | 上传 | 令牌桶限速（burst 3 / 10.5 秒一个）、跳过已存在、只试运行、管理员自动通过审核、导出投递结果 CSV（UTF-8 BOM） |
 | 权限 | 「已有资源」（看/删站内文件）仅管理员；站内子目录与根目录不可删（站点没有「目录」实体） |
-| 单测 / 端到端 | 31 项 / 生产 62 项断言全过、站点无残留 |
+| 单测 / 端到端 | 32 项 / 生产 63 项断言全过、站点无残留 |
 | 打包 | Chrome / Edge 两个包都能 `--pack-extension` 通过；`content.js` 逐字节相同，Edge 清单多一个 `browser_specific_settings.edge` |
 | 真人鼠标 | 未验证（手感、大文件进度、滚动时的跟随） |
 | 使用者 | 站点管理员账号（真实账号不进仓库；跑端到端时向使用者索取）。密码不写进仓库 |
@@ -104,11 +104,11 @@ upc-batch-uploader/
 │   ├── 状态 state          # me/categories/subcategories/index/course{name,dirs}/activeDir/running/progress/fullscreen
 │   ├── UI                 # 标题鲸鱼 → 课程头 → 左目录栏 → 右文件区 → 底部队列；bind/组合框/拖拽
 │   └── 路由同步            # isUploadRoute()/syncWithRoute()：进 /admin 开、离开就关并清空
-├── selftest.js            # node selftest.js（31 项纯函数单测）
+├── selftest.js            # node selftest.js（32 项纯函数单测）
 ├── HANDOFF.md             # ★ 现在做到哪、验过什么、还没做（版本历史在 docs/history.md）
 ├── tools/
 │   ├── headless.ps1       # 起无头 Chrome → 跑 smoke 或 screenshot → 清理
-│   ├── smoke.mjs          # CDP 端到端（62 项断言：外观+铺满→「?」弹层→两档盒子/四档字号→门禁→导入→拖文件夹→上传→CSV→两段式删除→垃圾桶→换课清空）
+│   ├── smoke.mjs          # CDP 端到端（63 项断言：外观+铺满→「?」弹层→两档盒子/四档字号→门禁→导入→拖文件夹→上传→CSV→两段式删除→垃圾桶→换课清空）
 │   └── screenshot.mjs     # 生成 preview.png（假 File，不上传）
 ├── docs/
 │   ├── api.md             # ★ 服务端契约实测记录（字段、状态码、限速）
@@ -303,8 +303,8 @@ node selftest.js                                   # 秒级，零副作用
 
 ## 12. 交接检查清单
 
-- [ ] `node selftest.js` 全绿（31 项）
-- [ ] tools/headless.ps1 62 项断言全过，站点无残留（第 9 步会验证）
+- [ ] `node selftest.js` 全绿（32 项）
+- [ ] tools/headless.ps1 63 项断言全过，站点无残留（第 9 步会验证）
 - [ ] 若改了 UI：重新跑 `-Screenshot`，`preview.png` 有变化
 - [ ] 若改了接口假设：同步更新 `docs/api.md`
 - [ ] 若改了设计取舍：同步更新 `docs/design.md`

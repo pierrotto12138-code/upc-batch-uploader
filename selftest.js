@@ -296,6 +296,18 @@ test('每个学科分类都固定有一行「根目录」', () => {
   assert.strictEqual(B.collectCourseTargets(fresh, false).length, 0)
 })
 
+test('根目录与站内已有的子目录都不给改名', () => {
+  // 根目录是学科分类本身：改名会让文件落到一个真叫「根目录」的子目录里
+  assert.strictEqual(B.canRenameDir({ name: '', files: [], isRoot: true }), false)
+  // 站内已有的子目录没有改名接口
+  assert.strictEqual(B.canRenameDir({ name: '期末试卷', files: [], fromSite: true }), false)
+  // 传过文件的本地目录也当作站内已有
+  assert.strictEqual(B.canRenameDir({ name: '课件', files: [{ status: 'done' }] }), false)
+  // 只有本次新建、还没传过的才给改
+  assert.strictEqual(B.canRenameDir({ name: '新子目录', files: [] }), true)
+  assert.strictEqual(B.canRenameDir(null), false)
+})
+
 test('整理规范文案与代码规则一致（界面上说的 = 代码做的）', () => {
   const text = B.ORGANIZE_PROMPT
   assert.ok(Array.isArray(B.ORGANIZE_PROMPT_LINES), '文案按行存放，方便逐条核对')

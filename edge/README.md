@@ -13,7 +13,7 @@
 3. 打开 <https://in.upcshare.cn> 登录，点导航栏的「上传资料」。
 
 也可以从 [Releases](https://github.com/pierrotto12138-code/upc-batch-uploader/releases) 直接下
-`upcshare-batch-uploader-edge-0.3.32.zip` 解压后加载，内容与本目录相同。
+`upcshare-batch-uploader-edge-0.3.33.zip` 解压后加载，内容与本目录相同。
 
 ## 改代码时注意
 
