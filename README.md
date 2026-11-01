@@ -5,6 +5,7 @@
 
   <p>
     <img alt="Chrome MV3" src="https://img.shields.io/badge/Chrome-MV3-4285F4?logo=googlechrome&logoColor=white">
+    <img alt="Edge MV3" src="https://img.shields.io/badge/Edge-MV3-0078D7?logo=microsoftedge&logoColor=white">
     <img alt="零依赖" src="https://img.shields.io/badge/dependencies-0-success">
     <img alt="无构建" src="https://img.shields.io/badge/build-none-lightgrey">
     <img alt="测试" src="https://img.shields.io/badge/tests-31%20unit%20%2B%2062%20e2e-success">
@@ -62,12 +63,13 @@ upcshare 是校内共享课程资料的平台：课件、试卷、实验报告�
 **它不是**：服务端程序（没有后端、没有数据库、没有构建步骤）、爬虫（只操作你自己登录的账号）、
 站点的改动（[upc-share](https://github.com/foggy-33/upc-share) 仓库一行代码都没动）。
 
-## 两种形态
+## 三种形态
 
 同一套规则有两种形态，按需选择：
 
 - **站点内置页**（推荐，[PR #1](https://github.com/foggy-33/upc-share/pull/1) 合并后可用）：`/admin` 直接就是批量工作台，**外观与本插件同一套**（同样的页头、卡片、尺寸），不用装任何东西。
 - **本插件**（实验性作品，可以当成"另一个皮肤"）：功能与规则和上面那份一致，外观也同一套，区别只在形态——它是覆盖在站点上的独立面板，随时可开可关，也不用等上游合并。
+- **Edge 版**（功能与 Chrome 版完全一致）：源码与安装说明在 [edge/](edge/) 目录，`edge://extensions` → 开发人员模式 → 加载解压缩的扩展即可，详见 [edge/README.md](edge/README.md)。
 
 两者共用同一批纯函数与 31 条单测；哪边顺手用哪边。
 
@@ -118,6 +120,8 @@ upcshare 是校内共享课程资料的平台：课件、试卷、实验报告�
 3. 点「加载已解压的扩展程序」→ 选中 `upcshare-batch-uploader` 文件夹（里面能看到 `manifest.json`）。
 
 也可以直接从 [Releases](https://github.com/pierrotto12138-code/upc-batch-uploader/releases) 下载 zip 再解压。
+
+**用 Edge？** 功能与 Chrome 版完全相同，源码在 [edge/](edge/)：`edge://extensions` → 左下角「开发人员模式」→「加载解压缩的扩展」→ 选 `edge/` 目录。安装细节见 [edge/README.md](edge/README.md)。
 
 然后打开 <https://in.upcshare.cn> 并登录，点顶部导航栏的 **「上传资料」**，就会进入批量投递页面。
 没反应就刷新一次页面。
