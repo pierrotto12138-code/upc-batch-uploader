@@ -117,6 +117,7 @@ upc-batch-uploader/
 │   ├── pr-readiness.md    # ★ PR 就绪度与移植记录：结论、缺陷清单、待上游拍板的三件事
 │   ├── upstream-issue-draft.md  # 上游沟通草稿（**已当面沟通过，不再发送**，仅留档）
 │   └── upstream-pr-body.md        # ★ PR 正文（已创建 [#1](https://github.com/foggy-33/upc-share/pull/1)）
+├── edge/                  # Edge 版加载目录：manifest（多 browser_specific_settings.edge）+ content.js 副本 + 图标/README/preview
 ├── icons/                 # 16/48/128
 ├── preview.png            # README 用的截图
 └── README.md              # 面向使用者

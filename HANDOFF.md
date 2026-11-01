@@ -148,7 +148,7 @@ syncWithRoute()  // 进 /admin 且没开 → openPanel()；离开且开着 → c
 | 包 | 给谁 | 说明 |
 |---|---|---|
 | `dist/upcshare-batch-uploader/` + `upcshare-batch-uploader-0.3.32.zip` | Chrome | 2026-10-31 20:05 重建 |
-| `dist/upcshare-batch-uploader-edge/` + `upcshare-batch-uploader-edge-0.3.32.zip` | Edge | 2026-11-01 收到，清单多一个 `browser_specific_settings.edge`；Edge 156 实测 `--load-extension` 能加载并打开面板 |
+| `edge/`（仓库内目录）+ `dist/upcshare-batch-uploader-edge/` + `upcshare-batch-uploader-edge-0.3.32.zip` | Edge | 清单多一个 `browser_specific_settings.edge`；`content.js` 与根目录逐字节一致（改完要 `cp content.js edge/content.js`）；Edge 156 实测 `--load-extension` 能加载并打开面板 |
 | `upcshare-batch-uploader.crx` | 备份 | 带 `.key.pem` 签名，仅作备份——Chrome 个人版会拒绝手动拖入的 CRX，报 `CRX_REQUIRED_PROOF_MISSING` |
 
 两个文件夹都含 manifest + content.js + icons + README + LICENSE + `preview.png`。
