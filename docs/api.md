@@ -7,7 +7,7 @@
 > 感谢 [upc-share](https://github.com/foggy-33/upc-share) 的作者为学校资源共享做出的伟大贡献；
 > 感谢 DeepSeek V4.1 Flash 与 Qwen 3.8 Flash 的优渥能力。
 >
-> **最后实测**：2026-10-31（v0.3.32 复验：`/api/categories` 93 个、全站待审核 0 条、行为与下表一致）
+> **最后实测**：2026-11-16（row-delete 1.0.0 复验：登录 → 上传 24 字节探针 → 审核通过 → 搜索可见 → 删除 → 按前缀 0 条、待审核 0 条；行为与下表一致）
 
 ## 端点速查
 
@@ -193,6 +193,10 @@
 ```
 
 同时删除磁盘文件与数据库记录（`/api/admin/reject/{id}` 等价）。
+
+2026-11-16 实测：重复删除同一个 ID 仍返回 200（幂等），清理脚本可以兜底重试。
+权限是 `requireAdmin`；内容管理员另走 `/api/content-admin/files/{id}`（同样 DELETE，受 `album_categories` 范围限制）。
+资料库列表页的独立扩展 `row-delete/` 复用的就是这里的 `/api/admin/files/{id}`。
 
 ---
 

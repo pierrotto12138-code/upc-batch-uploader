@@ -69,6 +69,7 @@ node selftest.js
 | 上传 | 令牌桶限速（burst 3 / 10.5 秒一个）、跳过已存在、只试运行、管理员自动通过审核、导出投递结果 CSV（UTF-8 BOM） |
 | 权限 | 「已有资源」（看/删站内文件）仅管理员；站内子目录与根目录不可删（站点没有「目录」实体） |
 | 单测 / 端到端 | 32 项 / 生产 63 项断言全过、站点无残留 |
+| 第二个扩展 | `row-delete/` v1.0.0：资料库列表行内两次确认删除；5 项单测 + 24 项本地端到端 + 12 项生产端到端全过（2026-11-16，无残留） |
 | 打包 | Chrome / Edge 两个包都能 `--pack-extension` 通过；`content.js` 逐字节相同，Edge 清单多一个 `browser_specific_settings.edge` |
 | 真人鼠标 | 未验证（手感、大文件进度、滚动时的跟随） |
 | 使用者 | 站点管理员账号（真实账号不进仓库；跑端到端时向使用者索取）。密码不写进仓库 |
@@ -105,6 +106,7 @@ upc-batch-uploader/
 │   ├── UI                 # 标题鲸鱼 → 课程头 → 左目录栏 → 右文件区 → 底部队列；bind/组合框/拖拽
 │   └── 路由同步            # isUploadRoute()/syncWithRoute()：进 /admin 开、离开就关并清空
 ├── selftest.js            # node selftest.js（32 项纯函数单测）
+├── row-delete/            # ★ 第二个独立扩展：资料库行内删除（manifest + content.js + icons + selftest + tools）
 ├── HANDOFF.md             # ★ 现在做到哪、验过什么、还没做（版本历史在 docs/history.md）
 ├── tools/
 │   ├── headless.ps1       # 起无头 Chrome → 跑 smoke 或 screenshot → 清理
@@ -203,6 +205,8 @@ entry.status → 文件行状态、目录计数、底部队列同步
 | 用 `Blob.text()` 量 CSV 开头的 BOM | TextDecoder 解码时默认把字节序标记吃掉，明明带 BOM 的文件被量成"没有"，测试假红（v0.3.28 踩过） | 量 BOM 要看 `arrayBuffer()` 的前三个字节（EF BB BF）；要文本就 `new TextDecoder("utf-8",{ignoreBOM:true})` 再自己去掉开头那个字符 |
 | 断言里"先点取消、再读弹层可见性" | `folderConfirm.hidden` 是在取消之后才读的，永远 true，看起来像"确认根本没弹"（v0.3.28 踩过） | 状态要紧跟动作读，在任何收尾点击之前存进局部变量 |
 | 端到端"页面上已经有面板就跳过注入" | 上一轮超时/中断留下的无头 Chrome 还占着 9333，新一轮的 Chrome 绑不上端口，`smoke.mjs` 连到**旧浏览器**——那里面的面板是上一次注入的 `content.js`，于是改了代码照样 46/46 全过（v0.3.26 才发现） | `headless.ps1` 起 Chrome 前先把占着 `--remote-debugging-port` 的残留浏览器清掉；`smoke.mjs` 第 1 步**无条件**重新加载页面 + 注入工作副本，并把 `v版本号 / 字节数 / sha 前 12 位` 打进日志，让每次运行自带"测的是哪一份"的证据；`screenshot.mjs` 同理（否则 `content.js` 的宿主去重守卫会让注入变成空操作） |
+| 测试扩展时 mock 不在 `matches` 里 | 扩展"加载成功"但内容脚本从不执行：页面上没按钮，服务端连 `/api/auth/me` 都没收到（row-delete 第一次跑就这么被骗） | 生产清单只匹配 upcshare 三个域名；端到端用一份"只多一条 `http://127.0.0.1/*`"的清单副本，`content.js`/图标原样复制并核对 sha，另外单独断言生产清单没有多匹配 |
+| Edge 的 `--load-extension` 进程会自己重启 | `taskkill` 打原来的 PID，`--edge-skip-compat-layer-relaunch` 拉起来的主进程还在，调试端口和临时目录都留着 | 收尾按这次运行独有的 `--user-data-dir` 扫进程并 `Stop-Process`，只杀自己起的；成功/失败都 `process.exit`，别让 mock server 的 keep-alive 把脚本挂住 |
 
 ## 9. 测试
 
@@ -212,7 +216,20 @@ node selftest.js                                   # 秒级，零副作用
 .\tools\headless.ps1 -User <账号> -Password <密码> -Screenshot   # 重新生成 preview.png
 ```
 
-`smoke.mjs` 的 50 项断言：注入 → 登录 → 真实鼠标点导航「上传资料」→ 全屏页保留顶部导航 →
+第二个扩展 `row-delete/` 的测试是独立的：
+
+```powershell
+node row-delete/selftest.js                        # 5 项纯逻辑
+node row-delete/tools/e2e.mjs                      # 24 项，本地 mock + 真实扩展 + 真实鼠标（约 10 秒）
+$env:UPC_USER='<账号>'; $env:UPC_PASSWORD='<密码>'
+node row-delete/tools/prod-e2e.mjs                 # 12 项，生产站真传 24 字节探针再删掉
+```
+
+本地端到端用 Edge 无头 `--load-extension`；生产清单只匹配 upcshare 三个域名，所以测试加载的是一份
+"只多一条 `http://127.0.0.1/*`"的清单副本，`content.js` 与图标原样复制并核对 sha。
+生产端到端跑完必须回查：按探针前缀查 0 条、待审核 0 条，否则算失败。
+
+`smoke.mjs` 的 63 项断言：注入 → 登录 → 真实鼠标点导航「上传资料」→ 全屏页保留顶部导航 →
 **外层卡片已拆掉、内容分块成站点样式** → **纵向铺满（面板高 ≥ 视口高 - 导航栏）** →
 管理员能看到审核开关 → 点「资料库」自动关闭 →
 打开就是单视图工作台（无独立空状态页，清除用的 × 也藏着）→
@@ -231,6 +248,9 @@ node selftest.js                                   # 秒级，零副作用
 否则换课程/导入覆盖/删目录那几处确认会把无头测试卡住。
 
 **改 UI 后没跑 smoke 就等于没测。** 单测只覆盖纯函数，`content.js` 里 UI 部分只有 smoke 能覆盖。
+
+`row-delete` 的两段式状态、按钮规格、Vue 重画后不复活、删空占位、非管理员零注入，只有它自己的
+`e2e.mjs` 能覆盖；改完必须重跑。生产侧删除真实文件不可逆，`prod-e2e.mjs` 只碰带 `___row_del_probe` 前缀的探针。
 
 ## 10. 待办（按价值排序，含验收标准）
 
@@ -309,5 +329,7 @@ node selftest.js                                   # 秒级，零副作用
 - [ ] 若改了接口假设：同步更新 `docs/api.md`
 - [ ] 若改了设计取舍：同步更新 `docs/design.md`
 - [ ] 若改了 `content.js` / `manifest.json`：升版本号并重建 `dist/`（Chrome 与 Edge 两个文件夹 + 两个 zip + crx）
+- [ ] 若改了 `row-delete/`：`node row-delete/selftest.js` 与 `node row-delete/tools/e2e.mjs` 全过；升它的版本号并重打 `upcshare-row-delete-<版本>.zip`
+- [ ] row-delete 的生产端到端跑完确认按前缀 0 条（会真传一个 24 字节探针，失败也有兜底删除）
 - [ ] 阶段性收尾：更新 `HANDOFF.md` 的「做到哪 / 没做啥 / 复验命令」
 - [ ] 没有把密码/token 写进任何文件（`git grep -i password` 自查）

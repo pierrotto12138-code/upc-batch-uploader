@@ -10,6 +10,7 @@
     <img alt="无构建" src="https://img.shields.io/badge/build-none-lightgrey">
     <img alt="测试" src="https://img.shields.io/badge/tests-32%20unit%20%2B%2063%20e2e-success">
     <img alt="版本" src="https://img.shields.io/badge/version-0.3.33-blue">
+    <img alt="资料库删除" src="https://img.shields.io/badge/row--delete-1.0.0-e5484d">
     <img alt="License" src="https://img.shields.io/badge/license-MIT-blue">
   </p>
 
@@ -25,6 +26,8 @@
 
 ![批量投递面板预览：顶部学科分类栏，左侧子目录列表，右侧文件区，底部上传队列](preview.png)
 
+> 同仓库还有一个独立的小扩展 [row-delete/](row-delete/)：**upcshare 资料库删除**——管理员在资料库列表行直接删文件，不用进后台翻找。它和批量投递分开安装，互不影响。
+
 ---
 
 ## 目录
@@ -34,6 +37,7 @@
 - [功能一览](#功能一览)
 - [快速开始](#快速开始)
 - [安装](#安装)
+- [资料库删除（第二个扩展）](#资料库删除第二个扩展)
 - [使用](#使用)
   - [三种开始方式](#三种开始方式)
   - [推荐的文件夹结构](#推荐的文件夹结构)
@@ -134,6 +138,16 @@ Edge 用 `upcshare-batch-uploader-edge-0.3.33.zip`。两者代码完全相同，
 
 > 只在 `in.upcshare.cn`、`upcshare.cn`、`www.upcshare.cn` 三个域名生效，其它网站不会注入。
 > 卸载：`chrome://extensions`（Edge 是 `edge://extensions`）→ 移除，不留任何东西（插件零持久化）。
+
+## 资料库删除（第二个扩展）
+
+[row-delete/](row-delete/) 是**独立安装**的另一个扩展：在资料库列表每行「下载」旁边加一个「删除」，
+第一次点变成「确认删除」，4 秒内再点一次才真的删；只有管理员能看到，普通成员页面上什么都不多。
+删除走管理后台同一个 `DELETE /api/admin/files/{id}`，不碰密码和 token。
+
+从 [Releases](https://github.com/pierrotto12138-code/upc-batch-uploader/releases) 下载
+`upcshare-row-delete-1.0.0.zip`，解压后按上面的方式「加载已解压的扩展程序」即可。
+详细说明、实现取舍和测试命令见 [row-delete/README.md](row-delete/README.md)。
 
 ## 使用
 
@@ -319,6 +333,10 @@ Edge 用 `upcshare-batch-uploader-edge-0.3.33.zip`。两者代码完全相同，
 
 最近一次实测：2026-11-02，生产站 63 项断言全过、站点无残留、退出码 0。
 端到端会往生产站上传一个 17 字节的探针文件，跑完自动删除（失败时也有兜底清理）。
+
+资料库删除是独立扩展，测试也独立：`node row-delete/selftest.js`（5 项）、
+`node row-delete/tools/e2e.mjs`（24 项本地端到端）、`node row-delete/tools/prod-e2e.mjs`（12 项生产端到端）。
+2026-11-16 实测：生产 12 项全过、按前缀回查 0 条、退出码 0。
 
 ## 路线图
 

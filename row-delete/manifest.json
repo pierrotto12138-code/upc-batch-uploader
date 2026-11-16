@@ -1,0 +1,22 @@
+{
+  "manifest_version": 3,
+  "name": "upcshare 资料库删除",
+  "version": "1.0.0",
+  "description": "在 upcshare 资料库里直接删除文件，省得进管理后台翻找。仅管理员可用，删除前要点两次确认。",
+  "icons": {
+    "16": "icons/icon16.png",
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png"
+  },
+  "content_scripts": [
+    {
+      "matches": [
+        "https://in.upcshare.cn/*",
+        "https://upcshare.cn/*",
+        "https://www.upcshare.cn/*"
+      ],
+      "js": ["content.js"],
+      "run_at": "document_idle"
+    }
+  ]
+}

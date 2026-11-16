@@ -1,4 +1,4 @@
-# 交接文档 · 2026-11-02 · v0.3.33
+# 交接文档 · 2026-11-16 · v0.3.33 + row-delete 1.0.0
 
 > 配合 [AGENTS.md](AGENTS.md)（怎么开工）、[docs/design.md](docs/design.md)（为什么这样设计）、
 > [docs/history.md](docs/history.md)（每个版本改了什么）一起看。
@@ -11,6 +11,7 @@
 | 版本 | v0.3.33（`dist/` 已重建：Chrome / Edge 两个文件夹 + 两个 zip + crx） |
 | 单测 | 32 项全绿（`node selftest.js`） |
 | 端到端 | 生产站 63 项断言全过、站点无残留（2026-11-02） |
+| 第二个扩展 | `row-delete/` v1.0.0：5 单测 + 24 本地端到端 + 12 生产端到端全过、无残留（2026-11-16） |
 | Vue 镜像 | 31 条 `node --test` / 29 项无头断言 / `vite build` 均通过 |
 | 未验证 | 真人鼠标手感、几百 MB 大文件的进度表现 |
 | 提 PR | **已创建 [#1](https://github.com/foggy-33/upc-share/pull/1)**（2026-10-31，OPEN / MERGEABLE），等上游作者 review——见 [docs/pr-readiness.md](docs/pr-readiness.md) 与 §4 |
@@ -23,6 +24,7 @@
 - [3. 隐私与数据红线](#3-隐私与数据红线这一条最重要)
 - [4. 还没做的](#4-还没做的按价值排序)
 - [5. 分发包](#5-分发包)
+- [6. 第二个扩展：资料库删除](#6-第二个扩展资料库删除)
 
 > 版本历史（v0.3.6 → v0.3.32 每轮改了什么）搬到了 [docs/history.md](docs/history.md)。
 
@@ -156,3 +158,32 @@ syncWithRoute()  // 进 /admin 且没开 → openPanel()；离开且开着 → c
 
 安装：Chrome 用 `chrome://extensions`、Edge 用 `edge://extensions` → 开发者模式 → 加载已解压 → 选对应文件夹 → 刷新 upcshare 页面。
 **不要把项目根目录当扩展加载**（里面有 1.5GB 的 `files/` 和归档）。
+
+---
+
+## 6. 第二个扩展：资料库删除
+
+`row-delete/` 是**独立安装**的第二个扩展，v1.0.0。它只做一件事：在资料库列表每行「下载」旁加
+「删除」，点两次确认（4 秒超时复位），调用管理后台同一个 `DELETE /api/admin/files/{id}`。
+只有 `is_admin` 才注入；普通成员页面上连样式都没有。
+
+**为什么独立**：批量投递只在 `/admin` 挂面板，资料库删除要在公开列表页工作；两者互不依赖，
+坏了也不会互相拖累。代码、清单、图标、测试全部在 `row-delete/` 内。
+
+**结构**：`content.js`（纯函数挂 `__UPC_ROW_DELETE__`，Node 里只导出不启动 UI）、`manifest.json`、
+`icons/`、`selftest.js`、`tools/{e2e,mock-server,prod-e2e,make-icons}.mjs`、`README.md`。
+
+**怎么验**：
+
+```powershell
+node row-delete/selftest.js          # 5 项
+node row-delete/tools/e2e.mjs        # 24 项：真实 Edge 加载扩展 + 真实鼠标 + 本地 mock
+$env:UPC_USER='<账号>'; $env:UPC_PASSWORD='<密码>'
+node row-delete/tools/prod-e2e.mjs   # 12 项：生产传 24 字节探针 → 搜索 → 两次点击删除 → 回查无残留
+```
+
+2026-11-16 实测：生产 12 项全过、按前缀 0 条、待审核 0 条、退出码 0；本地 24 项全过、退出码 0。
+`e2e.mjs` 加载的是"生产清单 + 一条 `http://127.0.0.1/*`"的临时副本，`content.js` 与仓库逐字节相同并核对 sha。
+
+**分包**：`dist/upcshare-row-delete/` + `upcshare-row-delete-1.0.0.zip`（zip 根目录直接是
+manifest/content.js/icons/README/LICENSE，不用再套一层）。发布时挂到 Release `row-delete-v1.0.0`。
